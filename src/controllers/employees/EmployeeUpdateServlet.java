@@ -94,25 +94,3 @@ public class EmployeeUpdateServlet extends HttpServlet {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
