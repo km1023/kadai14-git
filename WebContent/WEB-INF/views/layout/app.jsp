@@ -11,13 +11,25 @@
     <body>
         <div id="wrapper">
             <div id="header">
-                <h1>日報管理システム</h1>
-            </div>
-            <div id="content">
-                ${param.content}
-            </div>
-            <div id="footer">
-                by taro kirameki
+                <div id="header_manu">
+                    <h1><a href="<c:url value='/' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;
+                    <c:if test="${sessionScope.login_employee != null}">
+                        <a href="<c:url value='/employees/index' />">従業員管理</a>&nbsp;
+                    </c:if>
+                    <a href="<c:url value='/reports/index' />">日報管理</a>&nbsp;
+                </div>
+                <c:if test="${sessionScope.login_employee != null}">
+                    <div>
+                        <c:out value="${sessionScope.login_employee.name}" />&nbsp;さん&nbsp;&nbsp;&nbsp;
+                        <a href="<c:url value='/logout' />">ログアウト</a>
+                    </div>
+                </c:if>
+                <div id="content">
+                    ${param.content}
+                </div>
+                <div id="footer">
+                    by taro kirameki
+                </div>
             </div>
         </div>
     </body>
