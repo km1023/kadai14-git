@@ -16,16 +16,16 @@ import utils.DBUtil;
 import utils.EncryptUtil;
 
 /**
- * Servlet implementation class Loginservlet
+ * Servlet implementation class LoginServlet
  */
 @WebServlet("/login")
-public class Loginservlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Loginservlet() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,9 +33,10 @@ public class Loginservlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
+    // ログイン画面を表示
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("_token", request.getSession().getId());
-        request.setAttribute("hasError",false);
+        request.setAttribute("hasError", false);
         if(request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");
@@ -48,7 +49,9 @@ public class Loginservlet extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
+    // ログイン処理を実行
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 認証結果を格納する変数
         Boolean check_result = false;
 
         String code = request.getParameter("code");
@@ -56,7 +59,7 @@ public class Loginservlet extends HttpServlet {
 
         Employee e = null;
 
-        if(code != null && !code.contentEquals("") && plain_pass != null && !plain_pass.contentEquals("")) {
+        if(code != null && !code.equals("") && plain_pass != null && !plain_pass.equals("")) {
             EntityManager em = DBUtil.createEntityManager();
 
             String password = EncryptUtil.getPasswordEncrypt(
@@ -64,14 +67,13 @@ public class Loginservlet extends HttpServlet {
                     (String)this.getServletContext().getAttribute("salt")
                     );
 
-
+            // 社員番号とパスワードが正しいかチェックする
             try {
                 e = em.createNamedQuery("checkLoginCodeAndPassword", Employee.class)
-                        .setParameter("code", code)
-                        .setParameter("pass", password)
-                        .getSingleResult();
-            }
-            catch(NoResultException ex) {}
+                      .setParameter("code", code)
+                      .setParameter("pass", password)
+                      .getSingleResult();
+            } catch(NoResultException ex) {}
 
             em.close();
 
@@ -81,19 +83,20 @@ public class Loginservlet extends HttpServlet {
         }
 
         if(!check_result) {
-
+            // 認証できなかったらログイン画面に戻る
             request.setAttribute("_token", request.getSession().getId());
             request.setAttribute("hasError", true);
             request.setAttribute("code", code);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/login/login.jsp");
             rd.forward(request, response);
-        }
-        else {
+        } else {
+            // 認証できたらログイン状態にしてトップページへリダイレクト
             request.getSession().setAttribute("login_employee", e);
 
-            request.getSession().setAttribute("flush", "ログインしました");
+            request.getSession().setAttribute("flush", "ログインしました。");
             response.sendRedirect(request.getContextPath() + "/");
         }
     }
+
 }
