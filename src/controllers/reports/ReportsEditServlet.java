@@ -1,4 +1,4 @@
-package controller.reports;
+package controllers.reports;
 
 import java.io.IOException;
 
