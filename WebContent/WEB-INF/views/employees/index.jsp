@@ -3,7 +3,7 @@
 <c:import url="../layout/app.jsp">
     <c:param name="content">
         <c:if test="${flush != null}">
-            <div id="flush_succes">
+            <div id="flush_success">
                 <c:out value="${flush}"></c:out>
             </div>
         </c:if>
@@ -33,7 +33,7 @@
                 </c:forEach>
             </tbody>
         </table>
-        
+
         <div id="pagination">
             (全 ${employees_count} 件) <br />
             <c:forEach var="i" begin="1" end="${((employees_count - 1) / 15) + 1}" step="1">
@@ -48,7 +48,7 @@
             </c:forEach>
         </div>
         <p><a href="<c:url value='/employees/new' />">新規従業員の登録</a></p>
-        
+
     </c:param>
 </c:import>
 

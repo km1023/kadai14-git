@@ -58,7 +58,7 @@ public class TopPageIndexServlet extends HttpServlet {
         em.close();
         
         request.setAttribute("reports", reports);
-        request.setAttribute("report_count", reports_count);
+        request.setAttribute("reports_count", reports_count);
         request.setAttribute("page", page);
         
         if(request.getSession().getAttribute("flush") != null) {
